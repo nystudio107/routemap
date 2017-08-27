@@ -136,7 +136,7 @@ class RouteMapService extends BaseApplicationComponent
      *
      * @return array
      */
-    public function getAllRouteRules($format)
+    public function getAllRouteRules($format = 'Craft')
     {
         $routeRules = array();
         // Just return the data if it's already cached
@@ -177,7 +177,7 @@ class RouteMapService extends BaseApplicationComponent
      *
      * @return array
      */
-    public function getSectionRouteRules($section, $format)
+    public function getSectionRouteRules($section, $format = 'Craft')
     {
         $route = array();
         // Just return the data if it's already cached

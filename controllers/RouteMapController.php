@@ -36,8 +36,9 @@ class RouteMapController extends BaseController
      *
      * @return array
      */
-    public function actionGetAllUrls($attributes = array())
+    public function actionGetAllUrls()
     {
+        $attributes = craft()->request->getParam('attributes', array());
         $this->returnJson(
             craft()->routeMap->getAllUrls($attributes)
         );
@@ -52,8 +53,9 @@ class RouteMapController extends BaseController
      *
      * @return array
      */
-    public function actionGetSectionUrls($section, $attributes = array())
+    public function actionGetSectionUrls($section)
     {
+        $attributes = craft()->request->getParam('attributes', array());
         $this->returnJson(
             craft()->routeMap->getSectionUrls($section, $attributes)
         );
@@ -66,7 +68,7 @@ class RouteMapController extends BaseController
      *
      * @return array
      */
-    public function actionGetAllRouteRules($format)
+    public function actionGetAllRouteRules($format = 'Craft')
     {
         $this->returnJson(
             craft()->routeMap->getAllRouteRules($format)
@@ -79,7 +81,7 @@ class RouteMapController extends BaseController
      *
      * @return array
      */
-    public function actionGetSectionRouteRules($section, $format)
+    public function actionGetSectionRouteRules($section, $format = 'Craft')
     {
         $this->returnJson(
             craft()->routeMap->getSectionRouteRules($section, $format)
@@ -95,10 +97,11 @@ class RouteMapController extends BaseController
      *
      * @return array
      */
-    public function actionGetUrlAssetUrls($url, $assetTypes = array('image'))
+    public function actionGetUrlAssetUrls($url)
     {
+        $assetTypes = craft()->request->getParam('assetTypes', array('image'));
         $this->returnJson(
-            craft()->routeMap->getUrlAssetUrls($url, $assetTypes = array('image'))
+            craft()->routeMap->getUrlAssetUrls($url, $assetTypes)
         );
     }
 }

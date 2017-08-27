@@ -28,9 +28,13 @@ Route Map maintains a cache of each requested set of URLs for excellent performa
 
 ## Configuring Route Map
 
+There's nothing to configure.
+
+## Using Route Map in your Twig Templates
+
 -Insert text here-
 
-## Using Route Map
+## Using Route Map via XHR
 
 -Insert text here-
 

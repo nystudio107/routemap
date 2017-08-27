@@ -49,7 +49,7 @@ class RouteMapPlugin extends BasePlugin
      */
     public function getDescription()
     {
-        return Craft::t('Returns a list of public routes for sections with URLs');
+        return Craft::t('Returns a list of Craft/Vue/React route rules and entry & asset URLs for ServiceWorkers from Craft entries');
     }
 
     /**
@@ -106,36 +106,5 @@ class RouteMapPlugin extends BasePlugin
     public function hasCpSection()
     {
         return false;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSettingsHtml()
-    {
-        return craft()->templates->render('routemap/RouteMap_Settings', array(
-            'settings' => $this->getSettings(),
-        ));
-    }
-
-    /**
-     * @param mixed $settings The plugin's settings
-     *
-     * @return mixed
-     */
-    public function prepSettings($settings)
-    {
-        // Modify $settings here...
-        return $settings;
-    }
-
-    /**
-     * @return array
-     */
-    protected function defineSettings()
-    {
-        return array(
-            'someSetting' => array(AttributeType::String, 'label' => 'Some Setting', 'default' => ''),
-        );
     }
 }

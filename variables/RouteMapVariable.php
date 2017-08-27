@@ -22,7 +22,7 @@ class RouteMapVariable
      * Return all of the public URLs
      *
      * @param array $attributes array of attributes to set on the the
-     *                          ElementCriteralModel
+     *                          ElementCriteriaModel
      *
      * @return array
      */
@@ -36,7 +36,7 @@ class RouteMapVariable
      *
      * @param string $section
      * @param array  $attributes array of attributes to set on the the
-     *                           ElementCriteralModel
+     *                           ElementCriteriaModel
      *
      * @return array
      */

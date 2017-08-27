@@ -37,7 +37,7 @@ class RouteMapService extends BaseApplicationComponent
      * Return all of the public URLs
      *
      * @param array $attributes array of attributes to set on the the
-     *                          ElementCriteralModel
+     *                          ElementCriteriaModel
      *
      * @return array
      */
@@ -69,7 +69,7 @@ class RouteMapService extends BaseApplicationComponent
             }
         }
 
-        // @TODO: Support CategoryGroupts & Category URLs
+        // @TODO: Support CategoryGroups & Category URLs
 
         // @TODO: Commerce Products & Variant URLs
 
@@ -84,7 +84,7 @@ class RouteMapService extends BaseApplicationComponent
      *
      * @param string $section
      * @param array  $attributes array of attributes to set on the the
-     *                           ElementCriteralModel
+     *                           ElementCriteriaModel
      *
      * @return array
      */
@@ -161,7 +161,7 @@ class RouteMapService extends BaseApplicationComponent
             }
         }
 
-        // @TODO: Support CategoryGroupts & Category URLs
+        // @TODO: Support CategoryGroups & Category URLs
 
         // @TODO: Commerce Products & Variant URLs
 
@@ -250,15 +250,25 @@ class RouteMapService extends BaseApplicationComponent
             $fieldLayouts = $element->fieldLayout->getFields();
             foreach ($fieldLayouts as $fieldLayout) {
                 $field = craft()->fields->getFieldById($fieldLayout->fieldId);
-                // @TODO: Add support for Neo blocks
                 switch ($field->type) {
-                    case "Neo":
+                    // Get the URLs of all assets of the type $assetTypes
+                    case "FocusPoint_FocusPoint":
+                    case "Assets":
+                        $assets = $element[$field->handle];
+                        foreach ($assets as $asset) {
+                            /** @var $asset AssetFileModel */
+                            if (in_array($asset->kind, $assetTypes)) {
+                                array_push($assetUrls, $asset->getUrl());
+                            }
+                        }
                         break;
 
                     // Iterate through all of the matrix blocks
                     case "Matrix":
                         $blocks = $element[$field->handle];
                         foreach ($blocks as $block) {
+                            /** @var $block MatrixBlockModel */
+                            /** @var $matrixBlockTypeModel MatrixBlockTypeModel */
                             $matrixBlockTypeModel = $block->getType();
                             $matrixFields = $matrixBlockTypeModel->getFields();
 
@@ -269,6 +279,7 @@ class RouteMapService extends BaseApplicationComponent
                                     case "Assets":
                                         $assets = $block[$matrixField->handle];
                                         foreach ($assets as $asset) {
+                                            /** @var $asset AssetFileModel */
                                             if (in_array($asset->kind, $assetTypes)) {
                                                 array_push($assetUrls, $asset->getUrl());
                                             }
@@ -279,13 +290,29 @@ class RouteMapService extends BaseApplicationComponent
                         }
                         break;
 
-                    // Get the URLs of all assets of the type $assetTypes
-                    case "FocusPoint_FocusPoint":
-                    case "Assets":
-                        $assets = $element[$field->handle];
-                        foreach ($assets as $asset) {
-                            if (in_array($asset->kind, $assetTypes)) {
-                                array_push($assetUrls, $asset->getUrl());
+                    // Iterate through all of the Neo blocks
+                    case "Neo":
+                        $blocks = $element[$field->handle];
+                        foreach ($blocks as $block) {
+                            $neoBlockTypeModel = $block->getType();
+                            $fieldLayout = craft()->fields->getLayoutById($neoBlockTypeModel->fieldLayoutId);
+                            $fieldLayoutFields = $fieldLayout->getFields();
+
+                            // Iterate through the fieldLayoutFields
+                            foreach ($fieldLayoutFields as $fieldLayoutField) {
+                                $neoField = $fieldLayoutField->field;
+                                switch ($neoField->type) {
+                                    // Get the URLs of all assets of the type $assetTypes
+                                    case "FocusPoint_FocusPoint":
+                                    case "Assets":
+                                        $assets = $block[$neoField->handle];
+                                        foreach ($assets as $asset) {
+                                            if (in_array($asset->kind, $assetTypes)) {
+                                                array_push($assetUrls, $asset->getUrl());
+                                            }
+                                        }
+                                        break;
+                                }
                             }
                         }
                         break;
@@ -308,7 +335,7 @@ class RouteMapService extends BaseApplicationComponent
         $cacheKey = $this->getCacheKey(
             $this::ROUTEMAP_CACHE_PREFIX . $this::ROUTEMAP_CACHE_TIMESTAMP
         );
-        craft()->cache->set($cacheKey, time());
+        craft()->cache->set($cacheKey, time(), false);
     }
 
     // Protected Methods
@@ -410,7 +437,7 @@ class RouteMapService extends BaseApplicationComponent
         $cacheKey = $this->getCacheKey(
             $this::ROUTEMAP_CACHE_PREFIX . $key
         );
-        craft()->cache->set($cacheKey, $cacheData);
+        craft()->cache->set($cacheKey, $cacheData, false);
     }
 
     /**

@@ -1,6 +1,6 @@
 # Route Map Changelog
 
-## 1.0.0 -- 2017-08-26
+## 1.0.0 -- 2017-08-27
 
 * Initial release
 

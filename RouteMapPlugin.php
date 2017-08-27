@@ -26,6 +26,14 @@ class RouteMapPlugin extends BasePlugin
         craft()->on('entries.onBeforeSaveEntry', function (Event $event) {
             craft()->routeMap->invalidateCache();
         });
+
+        craft()->routeMap->invalidateCache();
+        $blogEntries = craft()->routeMap->getSectionUrls(
+            'blog'
+        );
+        foreach ($blogEntries as $blogEntry) {
+            $assetUrls = craft()->routeMap->getUrlAssetUrls($blogEntry);
+        }
     }
 
     /**

@@ -25,17 +25,21 @@ class RouteMapController extends BaseController
         'actionGetSectionUrls',
         'actionGetAllRouteRules',
         'actionGetSectionRouteRules',
+        'actionGetUrlAssetUrls',
     );
 
     /**
      * Return all of the public URLs
      *
+     * @param array $attributes array of attributes to set on the the
+     *                          ElementCriteralModel
+     *
      * @return array
      */
-    public function actionGetAllUrls()
+    public function actionGetAllUrls($attributes = array())
     {
         $this->returnJson(
-            craft()->routeMap->getAllUrls()
+            craft()->routeMap->getAllUrls($attributes)
         );
     }
 
@@ -43,13 +47,15 @@ class RouteMapController extends BaseController
      * Return the public URLs for a section
      *
      * @param string $section
+     * @param array  $attributes array of attributes to set on the the
+     *                           ElementCriteralModel
      *
      * @return array
      */
-    public function actionGetSectionUrls($section)
+    public function actionGetSectionUrls($section, $attributes = array())
     {
         $this->returnJson(
-            craft()->routeMap->getSectionUrls($section)
+            craft()->routeMap->getSectionUrls($section, $attributes)
         );
     }
 
@@ -77,6 +83,22 @@ class RouteMapController extends BaseController
     {
         $this->returnJson(
             craft()->routeMap->getSectionRouteRules($section, $format)
+        );
+    }
+
+    /**
+     * Get all of the assets of the type $assetTypes that are used in the Entry
+     * that matches the $url
+     *
+     * @param string $url
+     * @param array  $assetTypes
+     *
+     * @return array
+     */
+    public function actionGetUrlAssetUrls($url, $assetTypes = array('image'))
+    {
+        $this->returnJson(
+            craft()->routeMap->getUrlAssetUrls($url, $assetTypes = array('image'))
         );
     }
 }

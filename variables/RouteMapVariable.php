@@ -21,23 +21,28 @@ class RouteMapVariable
     /**
      * Return all of the public URLs
      *
+     * @param array $attributes array of attributes to set on the the
+     *                          ElementCriteralModel
+     *
      * @return array
      */
-    public function getAllUrls()
+    public function getAllUrls($attributes = array())
     {
-        return craft()->routeMap->getAllUrls();
+        return craft()->routeMap->getAllUrls($attributes);
     }
 
     /**
      * Return the public URLs for a section
      *
      * @param string $section
+     * @param array  $attributes array of attributes to set on the the
+     *                           ElementCriteralModel
      *
      * @return array
      */
-    public function getSectionUrls($section)
+    public function getSectionUrls($section, $attributes = array())
     {
-        return craft()->routeMap->getSectionUrls($section);
+        return craft()->routeMap->getSectionUrls($section, $attributes);
     }
 
     /**
@@ -61,5 +66,19 @@ class RouteMapVariable
     public function getSectionRouteRules($section, $format)
     {
         return craft()->routeMap->getSectionRouteRules($section, $format);
+    }
+
+    /**
+     * Get all of the assets of the type $assetTypes that are used in the Entry
+     * that matches the $url
+     *
+     * @param string $url
+     * @param array  $assetTypes
+     *
+     * @return array
+     */
+    public function getUrlAssetUrls($url, $assetTypes = array('image'))
+    {
+        return craft()->routeMap->getUrlAssetUrls($url, $assetTypes = array('image'));
     }
 }

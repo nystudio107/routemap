@@ -111,6 +111,15 @@ If you want just the route rules for a particular section, you can use the contr
 
 You can also pass in the optional `format` parameter to get route rules from a specific section, in a particular format via the controller API endpoint `/admin/actions/routeMap/getSectionRouteRules?section=blog&format=Vue`
 
+```
+{
+  "handle": "blog",
+  "type": "channel",
+  "url": "blog\/:slug",
+  "template": "blog\/_entry"
+}
+```
+
 ### Entry URLs
 
 The controller API endpoint `/admin/actions/routeMap/getAllUrls` will return a list of _all_ of the URLs to all of the Entries on your website:
@@ -337,6 +346,84 @@ By default, it returns only Assets of the type `image`. You can pass in an optio
 ## Using Route Map from your Plugins
 
 The `craft()->routeMap` service gives you access to all of the functions mentioned above via your plugins.
+
+### Route Rules
+
+To get all of your website's route rules:
+
+```
+{% set routeRules = craft()->routeMap->getAllRouteRules();
+```
+
+To specify the format that the route rules should be returned in, pass in either `Craft` | `React` | `Vue`:
+
+```
+{% set routeRules = craft()->routeMap->getAllRouteRules('Vue');
+```
+
+To get route rules from only a specific section (such as `blog`, in this case), pass in the Section handle:
+
+```
+{% set routeRules = craft()->routeMap->getSectionRouteRules('blog');
+```
+
+You can also pass in the optional `format` parameter to get route rules from a specific section, in a particular format:
+
+```
+{% set routeRules = craft()->routeMap->getSectionRouteRules('blog', 'Vue');
+```
+
+### Entry URLs
+
+To get all of your website's public Entry URLs:
+
+```
+$urls = craft()->routeMap->getAllUrls();
+```
+
+To refine the URLs returned, you can pass in optional `ElementCriteriaModel` attributes via key/value pairs:
+
+```
+$urls = craft()->routeMap->getAllUrls(array('limit' => 5));
+```
+
+or
+
+```
+$urls = craft()->routeMap->getAllUrls(array('limit' => 5, 'order' => 'postDate asc'));
+```
+
+To get URLs from just a specific Section:
+
+```
+$urls = craft()->routeMap->getSectionUrls('blog');
+```
+
+To refine the URLs returned, you can pass in optional `ElementCriteriaModel` attributes via key/value pairs:
+
+```
+$urls = craft()->routeMap->getSectionUrls('blog', array('limit' => 5));
+```
+
+or
+
+```
+$urls = craft()->routeMap->getSectionUrls('blog', array('limit' => 5, 'order' => 'postDate asc'));
+```
+
+### Entry URL Assets
+
+To get all of the Asset URLs in a particular Entry (whether in Assets fields or embedded in Matrix/Neo blocks) by passing in a URL or URI to the entry:
+
+```
+$urls = craft()->routeMap->getUrlAssetUrls('/blog/tags-gone-wild');
+```
+
+By default, it returns only Assets of the type `image`. You can pass in an optional array of Asset types you want returned:
+
+```
+$urls = craft()->routeMap->getUrlAssetUrls('/blog/tags-gone-wild', array('image', 'video', 'pdf'));
+```
 
 ## Route Map Roadmap
 

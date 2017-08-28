@@ -352,25 +352,25 @@ The `craft()->routeMap` service gives you access to all of the functions mention
 To get all of your website's route rules:
 
 ```
-{% set routeRules = craft()->routeMap->getAllRouteRules();
+$routeRules = craft()->routeMap->getAllRouteRules();
 ```
 
 To specify the format that the route rules should be returned in, pass in either `Craft` | `React` | `Vue`:
 
 ```
-{% set routeRules = craft()->routeMap->getAllRouteRules('Vue');
+$routeRules = craft()->routeMap->getAllRouteRules('Vue');
 ```
 
 To get route rules from only a specific section (such as `blog`, in this case), pass in the Section handle:
 
 ```
-{% set routeRules = craft()->routeMap->getSectionRouteRules('blog');
+$routeRules = craft()->routeMap->getSectionRouteRules('blog');
 ```
 
 You can also pass in the optional `format` parameter to get route rules from a specific section, in a particular format:
 
 ```
-{% set routeRules = craft()->routeMap->getSectionRouteRules('blog', 'Vue');
+$routeRules = craft()->routeMap->getSectionRouteRules('blog', 'Vue');
 ```
 
 ### Entry URLs

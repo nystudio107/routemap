@@ -1,6 +1,6 @@
 {
 	"name": "nystudio107/routemap",
-	"description": "Returns a list of public routes for sections with URLs",
+	"description": "Returns a list of Craft/Vue/React route rules and entry & asset URLs for ServiceWorkers from Craft entries",
 	"type": "craft-plugin",
 	"authors": [
 		{

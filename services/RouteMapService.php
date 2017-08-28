@@ -119,7 +119,9 @@ class RouteMapService extends BaseApplicationComponent
 
             // Iterate through the entries and grab their URLs
             foreach ($criteria as $entry) {
-                array_push($urls, $entry->url);
+                if (!in_array($entry->url, $urls, true)) {
+                    array_push($urls, $entry->url);
+                }
             }
 
             // Cache the result
@@ -258,7 +260,9 @@ class RouteMapService extends BaseApplicationComponent
                         foreach ($assets as $asset) {
                             /** @var $asset AssetFileModel */
                             if (in_array($asset->kind, $assetTypes)) {
-                                array_push($assetUrls, $asset->getUrl());
+                                if (!in_array($asset->getUrl(), $assetUrls, true)) {
+                                    array_push($assetUrls, $asset->getUrl());
+                                }
                             }
                         }
                         break;
@@ -281,7 +285,9 @@ class RouteMapService extends BaseApplicationComponent
                                         foreach ($assets as $asset) {
                                             /** @var $asset AssetFileModel */
                                             if (in_array($asset->kind, $assetTypes)) {
-                                                array_push($assetUrls, $asset->getUrl());
+                                                if (!in_array($asset->getUrl(), $assetUrls, true)) {
+                                                    array_push($assetUrls, $asset->getUrl());
+                                                }
                                             }
                                         }
                                         break;
@@ -308,7 +314,9 @@ class RouteMapService extends BaseApplicationComponent
                                         $assets = $block[$neoField->handle];
                                         foreach ($assets as $asset) {
                                             if (in_array($asset->kind, $assetTypes)) {
-                                                array_push($assetUrls, $asset->getUrl());
+                                                if (!in_array($asset->getUrl(), $assetUrls, true)) {
+                                                    array_push($assetUrls, $asset->getUrl());
+                                                }
                                             }
                                         }
                                         break;

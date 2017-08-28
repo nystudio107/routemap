@@ -239,7 +239,6 @@ The controller API endpoint `/admin/actions/routeMap/getUrlAssetUrls?url=/blog/t
 ```
 [
   "http:\/\/nystudio107.dev\/img\/blog\/buried-in-tag-manager-tags.jpg",
-  "http:\/\/nystudio107.dev\/img\/blog\/buried-in-tag-manager-tags.jpg",
   "http:\/\/nystudio107.dev\/img\/blog\/they-told-two-friends.png",
   "http:\/\/nystudio107.dev\/img\/blog\/tag-manager-tags-gone-wild.png",
   "http:\/\/nystudio107.dev\/img\/blog\/google-chrome-activity-indicator.png",

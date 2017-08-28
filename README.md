@@ -336,7 +336,7 @@ By default, it returns only Assets of the type `image`. You can pass in an optio
 
 ## Using Route Map from your Plugins
 
-The `craft()->routeMap->` service gives you access to all of the functions mentioned above via your plugins.
+The `craft()->routeMap` service gives you access to all of the functions mentioned above via your plugins.
 
 ## Route Map Roadmap
 

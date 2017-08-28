@@ -16,7 +16,7 @@ Route Map works on Craft 2.4.x and Craft 2.5.x.
 
 ## Route Map Overview
 
-Route Map is a plugin to help bridge the routing gap between frontend technologies like Vue/React and Craft CMS. Using Route Map, you can define your routes in Craft CMS as usual, and use an XHR to get a list of the routes in JSON format for use in your Vue/React frontend.
+Route Map is a plugin to help bridge the routing gap between frontend technologies like Vue/React and Craft CMS. Using Route Map, you can define your routes in Craft CMS as usual, and use an XHR to get a list of the routes in JSON format for use in your Vue/React frontend (it converts `blog/{slug}` dynamic routes to `/blog/:slug`).
 
 This allows you to create your routes dynamically in Craft CMS using the GUI, and have them translate automatically to your frontend framework of choice.
 
@@ -34,7 +34,7 @@ There's nothing to configure.
 
 ### Route Rules
 
-The controller API endpoint `/admin/actions/routeMap/getAllRouteRules` will return all of your website's route rules in an associative array. By default, they are in Craft CMS format:
+The controller API endpoint `/admin/actions/routeMap/getAllRouteRules` will return all of your website's route rules in an associative array. By default, they are in Craft CMS format (e.g.: `blog/{slug}`):
 
 ```
 {
@@ -65,7 +65,7 @@ The controller API endpoint `/admin/actions/routeMap/getAllRouteRules` will retu
 }
 ```
 
-The `format` URL parameter allows you to specify either `Craft` | `React` | `Vue` format for your URL routes. For example, the controller API endpoint `/admin/actions/routeMap/getAllRouteRules?format=Vue` will return the same route rules above, but formatted for `Vue`:
+The `format` URL parameter allows you to specify either `Craft` | `React` | `Vue` format for your URL routes. For example, the controller API endpoint `/admin/actions/routeMap/getAllRouteRules?format=Vue` will return the same route rules above, but formatted for `Vue`  (e.g.: `blog/:slug`):
 
 ```
 {

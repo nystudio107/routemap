@@ -18,9 +18,9 @@ Route Map works on Craft 2.4.x and Craft 2.5.x.
 
 Route Map is a plugin to help bridge the routing gap between frontend technologies like Vue/React and Craft CMS. Using Route Map, you can define your routes in Craft CMS as usual, and use an XHR to get a list of the routes in JSON format for use in your Vue/React frontend (it converts `blog/{slug}` dynamic routes to `/blog/:slug`).
 
-This allows you to create your routes dynamically in Craft CMS using the GUI, and have them translate automatically to your frontend framework of choice.
+This allows you to create your routes dynamically in Craft CMS using the AdminCP, and have them translate automatically to your frontend framework of choice.
 
-Route Map also assists with ServiceWorkers by providing a list of all of the URLs on your Craft CMS site, or just the specific sections you're interested in. You can limit the URLs returned via any ElementCriteriaModel attributes, and Route Map can even return a list of URLs to all of the Assets that a particular Entry uses (whether in Assets fields, or embedded in Matrix/Neo blocks).
+Route Map also assists with ServiceWorkers by providing a list of all of the URLs on your Craft CMS site, or just the specific sections you're interested in. You can limit the URLs returned via any `ElementCriteriaModel` attributes, and Route Map can even return a list of URLs to all of the Assets that a particular Entry uses (whether in Assets fields, or embedded in Matrix/Neo blocks).
 
 This allows you, for instance, to have a ServiceWorker that will automatically pre-cache the latest 5 blog entries on your site, as well as any images displayed on those pages, so that they will work with offline browsing.
 
@@ -206,7 +206,7 @@ You can retrieve just the entries for a particular section via the controller AP
 ]
 ```
 
-Both of the above controller API endpoints support an optional `attributes` parameter that lets you pass in an array of ElementCriteriaModel attribute key/value pairs to be used to refine the Entries selected.
+Both of the above controller API endpoints support an optional `attributes` parameter that lets you pass in an array of `ElementCriteriaModel` attribute key/value pairs to be used to refine the Entries selected.
 
 For instance, if you wanted just the most recent 5 Entries from the `blog` section, you'd use the controller API endpoint `/admin/actions/routeMap/getSectionUrls?section=blog&attributes[limit]=5`:
 
@@ -290,7 +290,7 @@ To get all of your website's public Entry URLs:
 {% set urls = craft.routeMap.getAllUrls() %}
 ```
 
-To refine the URLs returned, you can pass in optional ElementCriterialModel attributes via key/value pairs:
+To refine the URLs returned, you can pass in optional `ElementCriteriaModel` attributes via key/value pairs:
 
 ```
 {% set urls = craft.routeMap.getAllUrls({'limit': 5}) %}
@@ -308,7 +308,7 @@ To get URLs from just a specific Section:
 {% set urls = craft.routeMap.getSectionUrls('blog') %}
 ```
 
-To refine the URLs returned, you can pass in optional ElementCriterialModel attributes via key/value pairs:
+To refine the URLs returned, you can pass in optional `ElementCriteriaModel` attributes via key/value pairs:
 
 ```
 {% set urls = craft.routeMap.getSectionUrls('blog', {'limit': 5}) %}

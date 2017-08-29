@@ -20,7 +20,7 @@ Route Map is a plugin to help bridge the routing gap between frontend technologi
 
 This allows you to create your routes dynamically in Craft CMS using the AdminCP, and have them translate automatically to your frontend framework of choice.
 
-Route Map also assists with ServiceWorkers by providing a list of all of the URLs on your Craft CMS site, or just the specific sections you're interested in. You can limit the URLs returned via any `ElementCriteriaModel` attributes, and Route Map can even return a list of URLs to all of the Assets that a particular Entry uses (whether in Assets fields, or embedded in Matrix/Neo blocks).
+Route Map also assists with [ServiceWorkers](https://nystudio107.com/blog/service-workers-and-offline-browsing) by providing a list of all of the URLs on your Craft CMS site, or just the specific sections you're interested in. You can limit the URLs returned via any `ElementCriteriaModel` attributes, and Route Map can even return a list of URLs to all of the Assets that a particular Entry uses (whether in Assets fields, or embedded in Matrix/Neo blocks).
 
 This allows you, for instance, to have a ServiceWorker that will automatically pre-cache the latest 5 blog entries on your site, as well as any images displayed on those pages, so that they will work with offline browsing.
 

@@ -26,7 +26,8 @@ class RouteMapService extends BaseApplicationComponent
     const ROUTEMAP_CACHE_TIMESTAMP = 'CacheTimeStamp';
     const ROUTEMAP_CACHE_DATA = 'CacheData';
     const ROUTEMAP_CACHE_RULES = 'Rules';
-    const ROUTEMAP_CACHE_URLS = 'Urls';
+    const ROUTEMAP_CACHE_ENTRY_URLS = 'EntryUrls';
+    const ROUTEMAP_CACHE_PRODUCT_URLS = 'ProductUrls';
     const ROUTEMAP_CACHE_ASSETS = 'Assets';
     const ROUTEMAP_CACHE_ALLURLS = 'AllUrls';
 
@@ -46,7 +47,7 @@ class RouteMapService extends BaseApplicationComponent
         $urls = array();
         // Just return the data if it's already cached
         $cacheKey = $this->getCacheKey(
-            $this::ROUTEMAP_CACHE_URLS . $this::ROUTEMAP_CACHE_ALLURLS,
+            $this::ROUTEMAP_CACHE_ENTRY_URLS . $this::ROUTEMAP_CACHE_ALLURLS,
             array(
                 $attributes,
             )
@@ -71,12 +72,74 @@ class RouteMapService extends BaseApplicationComponent
 
         // @TODO: Support CategoryGroups & Category URLs
 
-        // @TODO: Commerce Products & Variant URLs
+        // Get all commerce product types
+        foreach (craft()->commerce_productTypes->getAllProductTypes() as $productType)
+        {
+            if ($productType->hasUrls)
+            {
+                $urls = array_merge(
+                    $urls,
+                    $this->getProductUrls(
+                        $productType->id,
+                        $attributes
+                    )
+                );
+            }
+        }
+
 
         // Cache the result
         $this->setCachedValue($cacheKey, $urls);
 
         return $urls;
+    }
+
+    /**
+     * Return the public URLs for a productType
+     *
+     * @param string $productTypeId
+     * @param array  $attributes array of attributes to set on the the
+     *                           ElementCriteriaModel
+     *
+     * @return array
+     */
+    public function getProductUrls($productTypeId, $attributes)
+    {
+        $urls = array();
+
+        if (!empty($productTypeId)) {
+            // Just return the data if it's already cached
+            $cacheKey = $this->getCacheKey(
+                $this::ROUTEMAP_CACHE_PRODUCT_URLS,
+                array(
+                    $productTypeId,
+                    $attributes,
+                )
+            );
+            $cachedData = $this->getCachedValue($cacheKey);
+            if ($cachedData !== false) {
+                return $cachedData;
+            }
+
+            $criteria = craft()->elements->getCriteria('Commerce_Product');
+            $criteria->typeId = $productTypeId;
+            $criteria->limit = null;
+
+            // Add in any custom attributes to set on the ElementCriteriaModel
+            if (!empty($attributes)) {
+                $criteria->setAttributes($attributes);
+            }
+
+            // Iterate through the products and grab their URLs
+            foreach ($criteria as $product) {
+                if (!in_array($product->url, $urls, true)) {
+                    array_push($urls, $product->url);
+                }
+            }
+        }
+
+        return $urls;
+
     }
 
     /**
@@ -94,7 +157,7 @@ class RouteMapService extends BaseApplicationComponent
         if (!empty($section)) {
             // Just return the data if it's already cached
             $cacheKey = $this->getCacheKey(
-                $this::ROUTEMAP_CACHE_URLS,
+                $this::ROUTEMAP_CACHE_ENTRY_URLS,
                 array(
                     $section,
                     $attributes,

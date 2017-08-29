@@ -26,16 +26,23 @@ class RouteMapService extends BaseApplicationComponent
     const ROUTEMAP_CACHE_TIMESTAMP = 'CacheTimeStamp';
     const ROUTEMAP_CACHE_DATA = 'CacheData';
     const ROUTEMAP_CACHE_RULES = 'Rules';
+    const ROUTEMAP_CACHE_RULES_SECTIONS = 'Sections';
+    const ROUTEMAP_CACHE_RULES_PRODUCTTYPES = 'ProductTypes';
     const ROUTEMAP_CACHE_ENTRY_URLS = 'EntryUrls';
     const ROUTEMAP_CACHE_PRODUCT_URLS = 'ProductUrls';
     const ROUTEMAP_CACHE_ASSETS = 'Assets';
     const ROUTEMAP_CACHE_ALLURLS = 'AllUrls';
 
     private $commerceIsEnabled = false;
+    private $locale;
 
     function __construct() {
+        // check whether commerce is enabled
         $commerce = craft()->plugins->getPlugin('commerce', true);
         $this->commerceIsEnabled = $commerce && $commerce->isEnabled;
+
+        // set current locale
+        $this->locale = craft()->language;
     }
 
 
@@ -82,10 +89,8 @@ class RouteMapService extends BaseApplicationComponent
 
         if($this->commerceIsEnabled) {
             // Get list of all product types
-            foreach (craft()->commerce_productTypes->getAllProductTypes() as $productType)
-            {
-                if ($productType->hasUrls)
-                {
+            foreach (craft()->commerce_productTypes->getAllProductTypes() as $productType) {
+                if ($productType->hasUrls) {
                     $urls = array_merge(
                         $urls,
                         $this->getProductUrls(
@@ -238,12 +243,76 @@ class RouteMapService extends BaseApplicationComponent
 
         // @TODO: Support CategoryGroups & Category URLs
 
-        // @TODO: Commerce Products & Variant URLs
+        // Get all of the product types
+        if($this->commerceIsEnabled) {
+            $productTypes = craft()->commerce_productTypes->getAllProductTypes();
+            foreach ($productTypes as $productType) {
+                if ($productType->hasUrls) {
+                    $route = $this->getProductTypeRouteRules($productType->handle, $format);
+                    if (!empty($route)) {
+                        $routeRules[$productType->handle] = $route;
+                    }
+                }
+            }
+        }
 
         // Cache the result
         $this->setCachedValue($cacheKey, $routeRules);
 
         return $routeRules;
+    }
+
+    /**
+     * @param string $productTypeHandle
+     * @param string $format 'Craft'|'React'|'Vue'
+     *
+     * @return array
+     */
+    public function getProductTypeRouteRules($productTypeHandle, $format = 'Craft')
+    {
+        $route = array();
+        // Just return the data if it's already cached
+        $cacheKey = $this->getCacheKey(
+            $this::ROUTEMAP_CACHE_RULES . $this::ROUTEMAP_CACHE_RULES_PRODUCTTYPES,
+            array(
+                $productTypeHandle,
+                $format,
+            )
+        );
+        $cachedData = $this->getCachedValue($cacheKey);
+        if ($cachedData !== false) {
+            return $cachedData;
+        }
+        // Get the actual section
+        $productTypeModel = craft()->commerce_productTypes->getProductTypeByHandle($productTypeHandle);
+        if ($productTypeModel) {
+            // Get section data to return
+
+            $productTypeLocales = $productTypeModel->getLocales();
+
+            $urlFormat = '';
+
+            if (isset($productTypeLocales[$this->locale])) {
+                $urlFormat = $productTypeLocales[$this->locale]->urlFormat;
+            }
+
+            $route = array(
+                'handle'   => $productTypeModel->handle,
+                'type'     => 'commerce_product',
+                'url'      => $urlFormat,
+                'template' => $productTypeModel->template,
+            );
+
+            // @TODO: This should be extended to handle multiple locales
+
+            // Normalize the routes based on the format
+            $route = $this->normalizeFormat($format, $route);
+
+            // Cache the result
+            $this->setCachedValue($cacheKey, $route);
+        }
+
+        return $route;
     }
 
     /**
@@ -257,7 +326,7 @@ class RouteMapService extends BaseApplicationComponent
         $route = array();
         // Just return the data if it's already cached
         $cacheKey = $this->getCacheKey(
-            $this::ROUTEMAP_CACHE_RULES,
+            $this::ROUTEMAP_CACHE_RULES . $this::ROUTEMAP_CACHE_RULES_SECTIONS,
             array(
                 $section,
                 $format,

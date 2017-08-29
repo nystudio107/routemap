@@ -72,18 +72,22 @@ class RouteMapService extends BaseApplicationComponent
 
         // @TODO: Support CategoryGroups & Category URLs
 
-        // Get all commerce product types
-        foreach (craft()->commerce_productTypes->getAllProductTypes() as $productType)
-        {
-            if ($productType->hasUrls)
+        // Check to see if Commerce plugin is installed
+        $commerce = craft()->plugins->getPlugin('commerce', true);
+        if($commerce) {
+            // Get list of all product types
+            foreach (craft()->commerce_productTypes->getAllProductTypes() as $productType)
             {
-                $urls = array_merge(
-                    $urls,
-                    $this->getProductUrls(
-                        $productType->id,
-                        $attributes
-                    )
-                );
+                if ($productType->hasUrls)
+                {
+                    $urls = array_merge(
+                        $urls,
+                        $this->getProductUrls(
+                            $productType->id,
+                            $attributes
+                        )
+                    );
+                }
             }
         }
 
@@ -451,6 +455,7 @@ class RouteMapService extends BaseApplicationComponent
      */
     protected function getCachedValue($key)
     {
+        return false;
         // If the cache timestamp doesn't exist, or is not set, assume the value is not cached
         $cacheKey = $this->getCacheKey(
             $this::ROUTEMAP_CACHE_PREFIX . $this::ROUTEMAP_CACHE_TIMESTAMP

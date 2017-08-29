@@ -31,6 +31,14 @@ class RouteMapService extends BaseApplicationComponent
     const ROUTEMAP_CACHE_ASSETS = 'Assets';
     const ROUTEMAP_CACHE_ALLURLS = 'AllUrls';
 
+    private $commerceIsEnabled = false;
+
+    function __construct() {
+        $commerce = craft()->plugins->getPlugin('commerce', true);
+        $this->commerceIsEnabled = $commerce && $commerce->isEnabled;
+    }
+
+
     // Public Methods
     // =========================================================================
 
@@ -72,9 +80,7 @@ class RouteMapService extends BaseApplicationComponent
 
         // @TODO: Support CategoryGroups & Category URLs
 
-        // Check to see if Commerce plugin is installed
-        $commerce = craft()->plugins->getPlugin('commerce', true);
-        if($commerce) {
+        if($this->commerceIsEnabled) {
             // Get list of all product types
             foreach (craft()->commerce_productTypes->getAllProductTypes() as $productType)
             {

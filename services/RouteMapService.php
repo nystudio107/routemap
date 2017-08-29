@@ -455,7 +455,6 @@ class RouteMapService extends BaseApplicationComponent
      */
     protected function getCachedValue($key)
     {
-        return false;
         // If the cache timestamp doesn't exist, or is not set, assume the value is not cached
         $cacheKey = $this->getCacheKey(
             $this::ROUTEMAP_CACHE_PREFIX . $this::ROUTEMAP_CACHE_TIMESTAMP

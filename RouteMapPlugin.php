@@ -21,11 +21,25 @@ class RouteMapPlugin extends BasePlugin
     public function init()
     {
         parent::init();
+        // any time an element is saved or deleted we need to invalidate.
+        // unfortunately there is no onDeleteElement...
+        $invalidateEvents = array(
+            'elements.onSaveElement',
+            'entries.onDeleteEntry',
+            'sections.onDeleteSection',
+            'categories.onDeleteCategory',
+            'categories.onDeleteGroup',
+            'assets.onDeleteAsset',
+            'localization.onDeleteLocale',
+            'commerce_products.onDeleteProduct',
+        );
 
-        // Invalidate our caches whenever an entry is saved
-        craft()->on('entries.onBeforeSaveEntry', function (Event $event) {
-            craft()->routeMap->invalidateCache();
-        });
+        foreach($invalidateEvents as $event) {
+            craft()->on($event, function (Event $event) {
+                craft()->routeMap->invalidateCache();
+            });
+        }
+
     }
 
     /**
